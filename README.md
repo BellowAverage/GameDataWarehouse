@@ -14,168 +14,169 @@ Referring to mainstream gaming platforms in the market, the business model of th
 
 The imaginary gaming platform business database is divided into three business components: game store business (blue), player account business (green), order records (orange), and additional generic information tables (gray), as shown in section 1.3 Business Database Model Relationship Diagram.
 
+
 ### Business Data Table Design
 
 (1) Producer Table
 
 > The producer table records relevant information about game publishers, including ID, publisher name, etc.
 
-  -------------------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ----------------- ----------------- ------------ ------------------------------------
-  producer_id       int               Yes          Game Publisher ID
-  name              tinytext          No           Game Publisher Name
-  description       tinytext          No           Game Publisher Description
-  region_id         int               No           Publisher Location ID
-  share_rule        double            No           Revenue Sharing Rule with Publisher
-  last_update       datetime          No           Last Update Date
-  -------------------------------------------------------------------------------------
+| Field Name   | Data Type | Primary Key | Description                              |
+|--------------|-----------|-------------|------------------------------------------|
+| producer_id  | int       | Yes         | Game Publisher ID                        |
+| name         | tinytext  | No          | Game Publisher Name                      |
+| description  | tinytext  | No          | Game Publisher Description               |
+| region_id    | int       | No          | Publisher Location ID                    |
+| share_rule   | double    | No          | Revenue Sharing Rule with Publisher      |
+| last_update  | datetime  | No          | Last Update Date                         |
+
+---
 
 (2) Discount Table
 
 > The discount table records discount event information. The index is discount_id. Generally, determining whether a game is eligible for a discount requires two conditions:
 
-a. The game is eligible for the discount rule (select discount_id from store_page where discount_id <> NULL, select discount_id to connect to the discount table)
+a. The game is eligible for the discount rule (select discount_id from store_page where discount_id <> NULL, select discount_id to connect to the discount table).
 
-b. The game is within the valid discount period (... where start_date < last_update < end_date)
+b. The game is within the valid discount period (... where start_date < last_update < end_date).
 
-  ------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ----------------- ----------------- ------------ -----------------------
-  discount_id       int               Yes          Discount Rule ID
-  discount_rate     double            No           Discount Rate
-  start_date        datetime          No           Discount Start Date
-  end_date          datetime          No           Discount End Date
-  last_update       datetime          No           Last Update Date
-  ------------------------------------------------------------------------
+| Field Name   | Data Type | Primary Key | Description                |
+|--------------|-----------|-------------|----------------------------|
+| discount_id  | int       | Yes         | Discount Rule ID            |
+| discount_rate| double    | No          | Discount Rate               |
+| start_date   | datetime  | No          | Discount Start Date         |
+| end_date     | datetime  | No          | Discount End Date           |
+| last_update  | datetime  | No          | Last Update Date            |
+
+---
 
 (3) Language Table
 
 > The language table stores language names to determine applicable game languages.
 
-  ------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ----------------- ----------------- ------------ -----------------------
-  language_id       int               Yes          Language ID
-  name              tinytext          No           Language Name
-  last_update       datetime          No           Last Update Date
-  ------------------------------------------------------------------------
+| Field Name   | Data Type | Primary Key | Description      |
+|--------------|-----------|-------------|------------------|
+| language_id  | int       | Yes         | Language ID      |
+| name         | tinytext  | No          | Language Name    |
+| last_update  | datetime  | No          | Last Update Date |
+
+---
 
 (4) Region Table
 
 > The region table stores region information, including tax rates, which can be used for calculating order costs and revenue.
 
-  ------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ----------------- ----------------- ------------ -----------------------
-  region_id         int               Yes          Region ID
-  name              tinytext          No           Region Name
-  language_id       int               No           Applicable Language ID
-  tax_rate          double            No           Tax Rate
-  last_update       datetime          No           Last Update Date
-  ------------------------------------------------------------------------
+| Field Name   | Data Type | Primary Key | Description        |
+|--------------|-----------|-------------|--------------------|
+| region_id    | int       | Yes         | Region ID          |
+| name         | tinytext  | No          | Region Name        |
+| language_id  | int       | No          | Applicable Language ID |
+| tax_rate     | double    | No          | Tax Rate           |
+| last_update  | datetime  | No          | Last Update Date   |
+
+---
 
 (5) Game Table
 
 > The game table stores game information, including multiple foreign keys such as game developer ID and applicable language ID.
 
-  ------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ----------------- ----------------- ------------ -----------------------
-  game_id           int               Yes          Game ID
-  name              tinytext          No           Game Name
-  description       tinytext          No           Game Description
-  release_date      datetime          No           Game Release Date
-  producer_id       int               No           Publisher ID
-  language_id       int               No           Applicable Language ID
-  last_update       datetime          No           Last Update Date
-  ------------------------------------------------------------------------
+| Field Name   | Data Type | Primary Key | Description          |
+|--------------|-----------|-------------|----------------------|
+| game_id      | int       | Yes         | Game ID              |
+| name         | tinytext  | No          | Game Name            |
+| description  | tinytext  | No          | Game Description     |
+| release_date | datetime  | No          | Game Release Date    |
+| producer_id  | int       | No          | Publisher ID         |
+| language_id  | int       | No          | Applicable Language ID |
+| last_update  | datetime  | No          | Last Update Date     |
+
+---
 
 (6) Player Account Table
 
 > The player_account table stores player account information, with the player's real-name information ID serving as a foreign key connected to the player_info table (real-name information table). The purpose of this design is to enhance the business database's standardization, as a real-name player may have multiple game accounts, making it inappropriate to use account ID as the primary key for both real-name and account information.
 
-  ------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ----------------- ----------------- ------------ -----------------------
-  player_id         int               Yes          Player Account ID
-  verify_id         int               No           Player Real-Name Information ID
-  nickname          tinytext          No           Player Nickname
-  account_level     int               No           Account Level
-  create_date       datetime          No           Account Creation Date
-  region_id         int               No           Region ID
-  email_address     tinytext          No           Email Address
-  last_update       datetime          No           Last Update Date
-  ------------------------------------------------------------------------
+| Field Name   | Data Type | Primary Key | Description             |
+|--------------|-----------|-------------|-------------------------|
+| player_id    | int       | Yes         | Player Account ID        |
+| verify_id    | int       | No          | Player Real-Name Information ID |
+| nickname     | tinytext  | No          | Player Nickname          |
+| account_level| int       | No          | Account Level            |
+| create_date  | datetime  | No          | Account Creation Date    |
+| region_id    | int       | No          | Region ID                |
+| email_address| tinytext  | No          | Email Address            |
+| last_update  | datetime  | No          | Last Update Date         |
+
+---
 
 (7) Player Info Table
 
 > The player_info table stores player real-name information. The age information will be used to check if the account is restricted.
 
-  ------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ----------------- ----------------- ------------ -----------------------
-  verify_id         int               Yes          Real-Name Profile ID
-  real_name         tinytext          No           Real Name
-  citizen_number    tinytext          No           ID Number
-  age               int               No           Age
-  last_update       datetime          No           Last Update Date
-  ------------------------------------------------------------------------
+| Field Name   | Data Type | Primary Key | Description      |
+|--------------|-----------|-------------|------------------|
+| verify_id    | int       | Yes         | Real-Name Profile ID |
+| real_name    | tinytext  | No          | Real Name        |
+| citizen_number| tinytext | No          | ID Number        |
+| age          | int       | No          | Age              |
+| last_update  | datetime  | No          | Last Update Date |
+
+---
 
 (8) Store Page Table
 
 > The store_page table stores store page information, i.e., sales information such as pricing.
 
-  ------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ----------------- ----------------- ------------ -----------------------
-  game_id           int               Yes          Game ID
-  original_price    double            No           Original Price
-  last_update       datetime          No           Last Update Date
-  ------------------------------------------------------------------------
+| Field Name   | Data Type | Primary Key | Description          |
+|--------------|-----------|-------------|----------------------|
+| game_id      | int       | Yes         | Game ID              |
+| original_price| double   | No          | Original Price       |
+| last_update  | datetime  | No          | Last Update Date     |
+
+---
 
 (9) Email Address Table
 
 > The email_address table stores email information, indexed by email_address_id. Each entity's (e.g., player, publisher) contact information profile is indexed by this key.
 
-  -------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ------------------ ----------------- ------------ -----------------------
-  email_address_id   int               Yes          Email Profile ID
-  email_prefix       tinytext          No           Email Address Prefix
-  email_suffix_id    int               No           Email Address Suffix ID
-  last_update        datetime          No           Last Update Date
-  -------------------------------------------------------------------------
+| Field Name        | Data Type | Primary Key | Description          |
+|-------------------|-----------|-------------|----------------------|
+| email_address_id   | int       | Yes         | Email Profile ID     |
+| email_prefix       | tinytext  | No          | Email Address Prefix |
+| email_suffix_id    | int       | No          | Email Address Suffix ID |
+| last_update        | datetime  | No          | Last Update Date     |
+
+---
 
 (10) Email Suffix Table
 
 > The email_suffix table is designed for business database standardization. The email provider identification segment after "@" in all email profiles generates a lot of repetition, so this table is created separately.
 
-  ------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ----------------- ----------------- ------------ -----------------------
-  email_suffix_id   int               Yes          Email Address Suffix ID
-  suffix            tinytext          No           Email Address Suffix
-  last_update       datetime          No           Last Update Date
-  ------------------------------------------------------------------------
+| Field Name       | Data Type | Primary Key | Description           |
+|------------------|-----------|-------------|-----------------------|
+| email_suffix_id  | int       | Yes         | Email Address Suffix ID |
+| suffix           | tinytext  | No          | Email Address Suffix  |
+| last_update      | datetime  | No          | Last Update Date      |
+
+---
 
 (11) Sale Table
 
 > The sale table records order information.
 
-  ------------------------------------------------------------------------
-  Field Name         Data Type         Primary Key  Description
-  ----------------- ----------------- ------------ -----------------------
-  sale_id           int               Yes          Order ID
-  game_id           int               No           (Purchased) Game ID
-  player_id         int               No           (Buyer) Player ID
-  sale_date         datetime          No           Transaction Date
-  last_update       datetime          No           Last Update Date
-  ------------------------------------------------------------------------
+| Field Name   | Data Type | Primary Key | Description          |
+|--------------|-----------|-------------|----------------------|
+| sale_id      | int       | Yes         | Order ID             |
+| game_id      | int       | No          | (Purchased) Game ID  |
+| player_id    | int       | No          | (Buyer) Player ID    |
+| sale_date    | datetime  | No          | Transaction Date     |
+| last_update  | datetime  | No          | Last Update Date     |
+
+---
 
 ### Business Database Model Relationship Diagram
 
-![](./media/media/image1.emf)
+![](./media/media/image1.png)
 
 ### Analysis of PC Gaming Platform Transaction Data Warehouse Goals
 
@@ -201,7 +202,7 @@ b. The game is within the valid discount period (... where start_date < last_upd
 
 ### Conceptual Model of the PC Gaming Platform Transaction Data Warehouse
 
-![](./media/media/image2.emf)
+![](./media/media/image2.png)
 
 ### Logical Model of the PC Gaming Platform Transaction Data Warehouse
 
@@ -225,103 +226,104 @@ Introduction to Dimension Tables and Fact Tables
 
 ### PC Gaming Platform Transaction Data Warehouse Table Design
 
-**dim_player Table**
+### **dim_player Table**
 
-  --------------------------------------------------------------------------------
-  Column Name               Type             Description          Example Value
-  -------------------------- ---------------- ------------------- ---------------------
-  player_id                  int              Player ID            1
-  real_name                  varchar(255)     Player Real Name     Jack Lee
-  citizen_number             varchar(255)     ID Number            5338454274488630011
-  nickname                   varchar(63)      Account Nickname     RocketNumberOne
-  account_level              int              Account Level        1
-  if_limited                 tinyint(1)       Is Account Limited   1
-  integrated_email_address   tinytext         Complete Email Address abc@gmail.com
-  last_update                datetime         Last Update Date     2012-1-1 12:00:00
-  player_key                 bigint AI PK     Update Key           1
-  player_version_number      int              Update Version Number 1
-  player_valid_from          datetime         Valid From           2012-1-1 12:00:00
-  player_valid_through       datetime         Valid Through        2012-1-1 12:00:00
-  --------------------------------------------------------------------------------
+| Column Name              | Type             | Description              | Example Value         |
+|--------------------------|------------------|--------------------------|-----------------------|
+| player_id                | int              | Player ID                | 1                     |
+| real_name                | varchar(255)     | Player Real Name          | Jack Lee              |
+| citizen_number           | varchar(255)     | ID Number                | 5338454274488630011    |
+| nickname                 | varchar(63)      | Account Nickname          | RocketNumberOne       |
+| account_level            | int              | Account Level            | 1                     |
+| if_limited               | tinyint(1)       | Is Account Limited        | 1                     |
+| integrated_email_address | tinytext         | Complete Email Address    | abc@gmail.com         |
+| last_update              | datetime         | Last Update Date          | 2012-1-1 12:00:00     |
+| player_key               | bigint AI PK     | Update Key               | 1                     |
+| player_version_number    | int              | Update Version Number     | 1                     |
+| player_valid_from        | datetime         | Valid From               | 2012-1-1 12:00:00     |
+| player_valid_through     | datetime         | Valid Through            | 2012-1-1 12:00:00     |
 
-**dim_producer Table**
+---
 
-  --------------------------------------------------------------------------------
-  Column Name                Type            Description             Example Value
-  -------------------------- --------------- --------------------- -----------------
-  producer_id                int             Publisher ID            1
-  name                       varchar(63)     Publisher Name          Ubisoft
-  share_rule                 double          Revenue Sharing Rule    0.01
-  region_name                varchar(255)    Publisher Region Name   Iceland
-  tax_rate                   decimal(22,0)   Region Tax Rate         0.01
-  producer_key               bigint AI PK    Update Key              180
-  producer_version_number    int             Update Version Number   2
-  producer_valid_from        datetime        Valid From              2022-11-20 08:20:15
-  producer_valid_through     datetime        Valid Through           2022-11-20 08:20:15
-  last_update                date            Last Update Date        2012-1-1 12:00:00
-  --------------------------------------------------------------------------------
+### **dim_producer Table**
 
-**dim_game Table**
+| Column Name               | Type             | Description               | Example Value        |
+|---------------------------|------------------|---------------------------|----------------------|
+| producer_id               | int              | Publisher ID               | 1                    |
+| name                      | varchar(63)      | Publisher Name             | Ubisoft              |
+| share_rule                | double           | Revenue Sharing Rule       | 0.01                 |
+| region_name               | varchar(255)     | Publisher Region Name      | Iceland              |
+| tax_rate                  | decimal(22,0)    | Region Tax Rate            | 0.01                 |
+| producer_key              | bigint AI PK     | Update Key                | 180                  |
+| producer_version_number   | int              | Update Version Number      | 2                    |
+| producer_valid_from       | datetime         | Valid From                | 2022-11-20 08:20:15  |
+| producer_valid_through    | datetime         | Valid Through             | 2022-11-20 08:20:15  |
+| last_update               | date             | Last Update Date           | 2012-1-1 12:00:00    |
 
-  --------------------------------------------------------------------------
-  Column Name              Type              Description       Example Value
-  ------------------------ ----------------- ---------------   ------------------
-  game_id                  int               Game ID           1
-  game_version_number      int               Update Version Number 1
-  game_valid_from          datetime          Valid From        2022-11-20 08:20:15
-  game_valid_through       datetime          Valid Through     2022-11-20 08:20:15
-  last_update              datetime          Last Update Date  2012-1-1 12:00:00
-  producer                 varchar(255)      Publisher Name    Ubisoft
-  name                     varchar(63)       Game Name         League of Legends
-  release_date             datetime          Release Date      2012-1-1 12:00:00
-  language                 varchar(255)      Game Supported Language English
-  original_price           decimal(22,0)     Store Base Price  125.0
-  game_key                 bigint AI PK      Update Key        1
-  --------------------------------------------------------------------------
+---
 
-**dim_date Table**
+### **dim_game Table**
 
-  -----------------------------------------------------------------------------
-  Column Name                Type           Description          Example Value
-  -------------------------- -------------- -------------------- -----------------
-  date_key                   tinytext       Date ID              20000102
-  date_value                 datetime       Year-Month-Day       2000-01-02 00:00:00
-  day_in_year                int            Day of Year          1
-  day_in_month               int            Day of Month         1
-  is_first_day_in_month      tinytext       Is First Day of Month yes
-  is_last_day_in_month       tinytext       Is Last Day of Month yes
-  week_in_year               int            Week of Year         1
-  month_number               int            Month                1
-  year4                      int            Year                 2000
-  quarter_name               tinytext       Quarter Name         Q1
-  quarter_number             int            Quarter              1
-  year_quarter               tinytext       Year-Quarter         2000-Q1
-  year_month_number          tinytext       Year-Month           2000-01
-  -----------------------------------------------------------------------------
+| Column Name               | Type             | Description               | Example Value           |
+|---------------------------|------------------|---------------------------|-------------------------|
+| game_id                   | int              | Game ID                   | 1                       |
+| game_version_number       | int              | Update Version Number      | 1                       |
+| game_valid_from           | datetime         | Valid From                | 2022-11-20 08:20:15     |
+| game_valid_through        | datetime         | Valid Through             | 2022-11-20 08:20:15     |
+| last_update               | datetime         | Last Update Date           | 2012-1-1 12:00:00       |
+| producer                  | varchar(255)     | Publisher Name             | Ubisoft                 |
+| name                      | varchar(63)      | Game Name                 | League of Legends        |
+| release_date              | datetime         | Release Date               | 2012-1-1 12:00:00       |
+| language                  | varchar(255)     | Game Supported Language    | English                 |
+| original_price            | decimal(22,0)    | Store Base Price           | 125.0                   |
+| game_key                  | bigint AI PK     | Update Key                | 1                       |
 
-**fact_deal Table**
+---
 
-  ---------------------------------------------------------------------------------
-  Column Name                        Type         Description        Example Value
-  ---------------------------------- ------------ ------------------ -----------------
-  sale_id                            int          Order ID           1
-  game_id                            int          Game ID            1
-  player_id                          int          Player ID          1
-  producer_id                        int          Publisher ID       1
-  sale_date                          datetime     Transaction Date   2022-11-20 08:20:15
-  language_id_game                   int          Game Language ID   1
-  If_default_language_supported      tinyint(1)   Supports Player Language  1
-  If_available                       tinyint(1)   Is Order Rejected  1
-  total_revenue                      double       Total Revenue      80.4
-  tax_expense                        double       Tax Expense        30.2
-  share_expense                      double       Revenue Share Expense 20.5
-  net_profit                         double       Net Profit         120.5
-  last_update                        datetime     Last Update Date   2022-11-20 08:20:15
-  sale_key                           bigint AI PK Update Key         1
-  sale_version_number                int          Update Version Number 2
-  sale_valid_from                    datetime     Valid From         2022-11-20 08:20:15
-  sale_valid_through                 datetime     Valid Through      2022-11-20 08:20:15
-  ---------------------------------------------------------------------------------
+### **dim_date Table**
+
+| Column Name               | Type             | Description               | Example Value           |
+|---------------------------|------------------|---------------------------|-------------------------|
+| date_key                  | tinytext         | Date ID                   | 20000102                |
+| date_value                | datetime         | Year-Month-Day             | 2000-01-02 00:00:00     |
+| day_in_year               | int              | Day of Year               | 1                       |
+| day_in_month              | int              | Day of Month              | 1                       |
+| is_first_day_in_month     | tinytext         | Is First Day of Month     | yes                     |
+| is_last_day_in_month      | tinytext         | Is Last Day of Month      | yes                     |
+| week_in_year              | int              | Week of Year              | 1                       |
+| month_number              | int              | Month                     | 1                       |
+| year4                     | int              | Year                      | 2000                    |
+| quarter_name              | tinytext         | Quarter Name              | Q1                      |
+| quarter_number            | int              | Quarter                   | 1                       |
+| year_quarter              | tinytext         | Year-Quarter              | 2000-Q1                 |
+| year_month_number         | tinytext         | Year-Month                | 2000-01                 |
+
+---
+
+### **fact_deal Table**
+
+| Column Name                        | Type             | Description               | Example Value           |
+|------------------------------------|------------------|---------------------------|-------------------------|
+| sale_id                            | int              | Order ID                  | 1                       |
+| game_id                            | int              | Game ID                   | 1                       |
+| player_id                          | int              | Player ID                 | 1                       |
+| producer_id                        | int              | Publisher ID              | 1                       |
+| sale_date                          | datetime         | Transaction Date          | 2022-11-20 08:20:15     |
+| language_id_game                   | int              | Game Language ID          | 1                       |
+| If_default_language_supported      | tinyint(1)       | Supports Player Language  | 1                       |
+| If_available                       | tinyint(1)       | Is Order Rejected         | 1                       |
+| total_revenue                      | double           | Total Revenue             | 80.4                    |
+| tax_expense                        | double           | Tax Expense               | 30.2                    |
+| share_expense                      | double           | Revenue Share Expense     | 20.5                    |
+| net_profit                         | double           | Net Profit                | 120.5                   |
+| last_update                        | datetime         | Last Update Date           | 2022-11-20 08:20:15     |
+| sale_key                           | bigint AI PK     | Update Key                | 1                       |
+| sale_version_number                | int              | Update Version Number      | 2                       |
+| sale_valid_from                    | datetime         | Valid From                | 2022-11-20 08:20:15     |
+| sale_valid_through                 | datetime         | Valid Through             | 2022-11-20 08:20:15     |
+
+---
+
 
 # Dimension and Fact Table ETL Design
 
@@ -493,5 +495,3 @@ height="3.232638888888889in"}
 - From the table below, it can be seen that Germany is the largest market for this game store, and Russian games bring the highest profit.
 - ![](./media/media/image26.png){width="4.986805555555556in"
   height="2.807638888888889in"} Business suggestion: Promote in the second and third quarters; strengthen cooperation with 37 Interactive; enhance promotion in the German market; introduce more Russian games.
-
-# end
